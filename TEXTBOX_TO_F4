@@ -1,0 +1,53 @@
+PROCESS ON VALUE-REQUEST.
+  FIELD P0219-ORGTY MODULE GET_F4_ORGTY.
+*
+*{   INSERT         DEVK929813                                        1
+
+  FIELD P0219-ORGNM MODULE GET_F4_ORG_NAME.
+
+------------------
+
+MODULE GET_F4_ORG_NAME INPUT.
+
+DATA : WT_ORG_NAME TYPE STANDARD  TABLE OF ZORG_NAME.
+
+SELECT * FROM ZORG_NAME INTO CORRESPONDING FIELDS OF TABLE WT_ORG_NAME.
+CALL FUNCTION 'F4IF_INT_TABLE_VALUE_REQUEST'
+    EXPORTING
+*       DDIC_STRUCTURE         = ' '
+      RETFIELD               = 'ZORG_NAMES'
+*       PVALKEY                = ' '
+     DYNPPROG               = SY-CPROG
+     DYNPNR                 = SY-DYNNR
+     DYNPROFIELD            = 'ORGNM'
+*       STEPL                  = 0
+*       WINDOW_TITLE           =
+*       VALUE                  = ' '
+     VALUE_ORG              = 'S'
+*       MULTIPLE_CHOICE        = ' '
+*       DISPLAY                = ' '
+*       CALLBACK_PROGRAM       = ' '
+*       CALLBACK_FORM          = ' '
+*       MARK_TAB               =
+*     IMPORTING
+*       USER_RESET             =
+    TABLES
+      VALUE_TAB              = WT_ORG_NAME
+*       FIELD_TAB              =
+*       RETURN_TAB             =
+*       DYNPFLD_MAPPING        =
+*     EXCEPTIONS
+*       PARAMETER_ERROR        = 1
+*       NO_VALUES_FOUND        = 2
+*       OTHERS                 = 3
+            .
+  IF SY-SUBRC <> 0.
+* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*         WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+  ENDIF.
+
+
+
+ENDMODULE.                 " GET_F4_ORG_NAME  INPUT
+
+*}   INSERT
